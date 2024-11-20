@@ -1,9 +1,9 @@
 package unisangil.GestionPlus.servicio;
 
-import unisangil.GestionPlus.modelo.Totales;
-import unisangil.GestionPlus.repositorio.TotalesRepositorio;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import unisangil.GestionPlus.modelo.Totales;
+import unisangil.GestionPlus.repositorio.TotalesRepositorio;
 
 @Service
 public class TotalesServicio implements ITotalesServicio {
@@ -17,18 +17,7 @@ public class TotalesServicio implements ITotalesServicio {
     }
 
     @Override
-    public void actualizarTotales(Double ingreso, Double egreso) {
-        Totales totales = obtenerTotales();
-
-        if (ingreso != null) {
-            totales.setTotalIngresos(totales.getTotalIngresos() + ingreso);
-        }
-
-        if (egreso != null) {
-            totales.setTotalEgresos(totales.getTotalEgresos() + egreso);
-        }
-
-        totales.setTotalNeto(totales.getTotalIngresos() - totales.getTotalEgresos());
-        totalesRepository.save(totales);
+    public void actualizarTotales(Totales totales) {
+        totalesRepository.save(totales); // Guarda los totales actualizados
     }
 }

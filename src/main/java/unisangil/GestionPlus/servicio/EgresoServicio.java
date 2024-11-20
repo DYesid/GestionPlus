@@ -1,9 +1,10 @@
 package unisangil.GestionPlus.servicio;
 
-import unisangil.GestionPlus.modelo.Egreso;
-import unisangil.GestionPlus.repositorio.EgresoRepositorio;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import unisangil.GestionPlus.modelo.Egreso;
+import unisangil.GestionPlus.modelo.Totales;
+import unisangil.GestionPlus.repositorio.EgresoRepositorio;
 
 import java.util.List;
 
@@ -12,6 +13,9 @@ public class EgresoServicio implements IEgresoServicio {
 
     @Autowired
     private EgresoRepositorio egresoRepository;
+
+    @Autowired
+    private ITotalesServicio totalesServicio;
 
     @Override
     public List<Egreso> listarEgresos() {
@@ -25,7 +29,13 @@ public class EgresoServicio implements IEgresoServicio {
 
     @Override
     public void guardarEgreso(Egreso egreso) {
-        egresoRepository.save(egreso);
+        egresoRepository.save(egreso); // Guarda el egreso en la base de datos
+
+        // Actualiza los totales
+        Totales totales = totalesServicio.obtenerTotales();
+        totales.setTotalEgresos(totales.getTotalEgresos() + egreso.getMonto());
+        totales.setTotalNeto(totales.getTotalIngresos() - totales.getTotalEgresos());
+        totalesServicio.actualizarTotales(totales);
     }
 
     @Override
