@@ -23,23 +23,12 @@ public class EgresoServicio implements IEgresoServicio {
     }
 
     @Override
-    public Egreso buscarEgresoPorId(Long idEgreso) {
-        return egresoRepository.findById(idEgreso).orElse(null);
-    }
-
-    @Override
     public void guardarEgreso(Egreso egreso) {
-        egresoRepository.save(egreso); // Guarda el egreso en la base de datos
-
-        // Actualiza los totales
+        egresoRepository.save(egreso);
         Totales totales = totalesServicio.obtenerTotales();
         totales.setTotalEgresos(totales.getTotalEgresos() + egreso.getMonto());
         totales.setTotalNeto(totales.getTotalIngresos() - totales.getTotalEgresos());
         totalesServicio.actualizarTotales(totales);
     }
 
-    @Override
-    public void eliminarEgreso(Egreso egreso) {
-        egresoRepository.delete(egreso);
-    }
 }
